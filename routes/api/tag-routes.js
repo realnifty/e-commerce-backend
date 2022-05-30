@@ -71,16 +71,32 @@ router.put('/:id', (req, res) => {
       if (!dbData[0]) {
         res.status(404).json({ message: 'Tag not found!' });
         return;
-    }
-  })
+      }
+    })
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
-    })
+    });
 });
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
+  Tag.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(dbData => {
+      if (!dbData) {
+        res.status(404).json({ message: 'Tag not found!' });
+        return;
+      }
+      res.json(dbData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
