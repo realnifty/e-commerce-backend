@@ -50,10 +50,28 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
+  Category.create({
+    category_name: req.body.category_name
+  })
+    .then(dbData => res.json(dbData))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(req.body, {
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(dbData => {
+      if (!dbData[0]) {
+      res.status(404).json({ message: 'Category not found!'})
+    }
+  })
 });
 
 router.delete('/:id', (req, res) => {
